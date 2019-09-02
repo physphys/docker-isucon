@@ -11,8 +11,10 @@ services:
       - webapp
     ports:
       - "80:80"
+    volumes:
+      - udsocket:/var/socks
   webapp:
-    image: matsuu/isucon4-qualifier-webapp-ruby:latest
+    build: ./webapp/ruby
     links:
       - mysql
     ports:
@@ -22,6 +24,9 @@ services:
       ISU4_DB_PASSWORD: isucon
       ISU4_DB_HOST: mysql
       ISU4_DB_PORT: 3306
+    volumes:
+      - ./webapp/ruby:/home/isucon/webapp/ruby
+      - udsocket:/var/socks
   mysql:
     image: matsuu/isucon4-qualifier-mysql:latest
     ports:
@@ -30,3 +35,9 @@ services:
       MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
     volumes:
       - ./mysql/conf.d/my.cnf:/etc/mysql/conf.d/my.cnf
+  redis:
+    image: "redis:latest"
+    ports:
+      - "6379"
+volumes:
+  udsocket:
