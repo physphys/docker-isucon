@@ -4,7 +4,9 @@ ARG GIT_URL=https://github.com/isucon/isucon7-qualify.git
 
 RUN git clone $GIT_URL /home/isucon/isubata
 WORKDIR /home/isucon/isubata/webapp/ruby
-RUN bundle install --path vendor/bundle
+COPY ./vol/Gemfile /home/isucon/isubata/webapp/ruby/Gemfile
+COPY ./vol/Gemfile.lock /home/isucon/isubata/webapp/ruby/Gemfile.lock
+RUN bundle install
 
 EXPOSE 5000
 
